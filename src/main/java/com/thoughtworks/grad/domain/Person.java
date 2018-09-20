@@ -1,4 +1,4 @@
-package com.thoughtworks.grad.springmvcpractice;
+package com.thoughtworks.grad.domain;
 
 public class Person implements Comparable<Person> {
     private String name;

@@ -1,4 +1,4 @@
-package com.thoughtworks.grad.springmvcpractice;
+package com.thoughtworks.grad.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
