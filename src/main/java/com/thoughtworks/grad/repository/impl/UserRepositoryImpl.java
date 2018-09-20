@@ -41,5 +41,10 @@ public class UserRepositoryImpl implements UserRepository {
         return UserStorage.findContacts(userId);
     }
 
+    @Override
+    public User updateContact(int userId, Contact contact) {
+        return UserStorage.updateContact(userId, contact);
+    }
+
 
 }

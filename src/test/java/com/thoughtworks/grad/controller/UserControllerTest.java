@@ -1,5 +1,6 @@
 package com.thoughtworks.grad.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.grad.domain.Contact;
 import com.thoughtworks.grad.domain.User;
@@ -129,6 +130,23 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.contacts[1].id").value(2))
                 .andExpect(jsonPath("$.contacts[1].name").value("zeng zhipeng"))
                 .andExpect(jsonPath("$.contacts[1].number").value("18200288372"));
+    }
+
+    @Test
+    void should_update_a_contact_of_user() throws Exception {
+        createBasicUserWithContacts();
+        Contact newContact = new Contact(2, "wu qian", "female", 18, "18200288380");
+        int beforeSize = UserStorage.getUserById(5).getContacts().size();
+        mockMvc.perform(put("/api/users/5/contacts").contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content(new ObjectMapper().writeValueAsString(newContact))).andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.contacts", hasSize(2)))
+                .andExpect(jsonPath("$.contacts[1].id").value(2))
+                .andExpect(jsonPath("$.contacts[1].name").value("wu qian"))
+                .andExpect(jsonPath("$.contacts[1].gender").value("female"));
+
+        int afterSize = UserStorage.getUserById(5).getContacts().size();
+
+        assertThat(afterSize).isEqualTo(beforeSize);
     }
 
     @AfterEach

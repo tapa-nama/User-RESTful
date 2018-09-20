@@ -49,4 +49,22 @@ public class UserStorage {
     public static User findContacts(int userId) {
         return USERS.get(userId);
     }
+
+    public static User updateContact(int userId, Contact contact) {
+        User user = USERS.get(userId);
+        ArrayList<Contact> contacts = user.getContacts();
+        int contactId = contact.getId();
+        for (Contact oldContact :
+                contacts) {
+            if (oldContact.getId() == contactId) {
+                oldContact.setName(contact.getName());
+                oldContact.setAge(contact.getAge());
+                oldContact.setGender(contact.getGender());
+                oldContact.setNumber(contact.getNumber());
+            }
+        }
+        return user;
+
+
+    }
 }

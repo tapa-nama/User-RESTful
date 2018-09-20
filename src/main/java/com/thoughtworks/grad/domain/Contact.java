@@ -22,6 +22,26 @@ public class Contact {
     public Contact() {
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
     public int getAge() {
         return age;
     }

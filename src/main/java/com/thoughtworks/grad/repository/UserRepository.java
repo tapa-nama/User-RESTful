@@ -20,5 +20,7 @@ public interface UserRepository {
     User addContact(int userId, Contact contact);
 
     User findContacts(int userId);
+
+    User updateContact(int id, Contact contact);
 }
 
