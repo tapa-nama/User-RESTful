@@ -22,6 +22,10 @@ public class UserController {
         return userRepository.findUsers();
     }
 
-
+    @PostMapping("/api/users")
+    public ResponseEntity<User> createUser(@RequestBody User newUser) {
+        User user = userRepository.createUser(newUser);
+        return new ResponseEntity<User>(user, HttpStatus.CREATED);
+    }
 
 }

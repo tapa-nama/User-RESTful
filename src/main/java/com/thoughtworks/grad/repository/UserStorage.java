@@ -7,16 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserStorage {
-    static final Map<Integer, User> USERS = new HashMap<>();
-
-    static {
-        USERS.put(1, new User(1, "zhou"));
-        USERS.put(2, new User(2, "lan"));
-    }
+    private static final Map<Integer, User> USERS = new HashMap<>();
 
     public static Collection<User> getUsers() {
         return USERS.values();
     }
 
 
+    public static User save(User newUser) {
+
+        USERS.put(newUser.getId(), newUser);
+        return USERS.get(newUser.getId());
+    }
+
+    public static void clear() {
+        USERS.clear();
+    }
 }

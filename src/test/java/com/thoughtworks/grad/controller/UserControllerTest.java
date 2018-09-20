@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,6 +22,7 @@ public class UserControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = standaloneSetup(controller()).build();
+        UserStorage.clear();
     }
 
     private UserController controller() {
@@ -29,14 +31,30 @@ public class UserControllerTest {
 
     @Test
     void should_get_url_from_server() throws Exception {
+        UserStorage.save(new User(1, "zhou"));
+        UserStorage.save(new User(2, "lan"));
+
         mockMvc.perform(get("/api/users")).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name").value("zhou"))
                 .andExpect(jsonPath("$[1].name").value("lan"));
     }
 
+
     @Test
     void should_create_new_user() throws Exception {
+        User newUser = new User(3, "wuqian");
+        int beforeSize = UserStorage.getUsers().size();
+
+
+        mockMvc.perform(post("/api/users").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new ObjectMapper().writeValueAsString(newUser))).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(3))
+                .andExpect(jsonPath("$.name").value("wuqian"));
+
+        int afterSize = UserStorage.getUsers().size();
+
+        assertThat(afterSize).isEqualTo(beforeSize + 1);
 
     }
 }
