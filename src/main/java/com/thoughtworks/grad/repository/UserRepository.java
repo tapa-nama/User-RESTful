@@ -10,5 +10,7 @@ public interface UserRepository {
 
 
     User createUser(User newUser);
+
+    User update(User user);
 }
 

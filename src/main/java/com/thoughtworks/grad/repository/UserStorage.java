@@ -23,4 +23,12 @@ public class UserStorage {
     public static void clear() {
         USERS.clear();
     }
+
+    public static User update(User user) {
+        User beforeUser = USERS.get(user.getId());
+
+        beforeUser.setName(user.getName());
+
+        return beforeUser;
+    }
 }

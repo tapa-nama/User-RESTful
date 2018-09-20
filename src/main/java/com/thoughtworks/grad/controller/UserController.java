@@ -5,10 +5,7 @@ import com.thoughtworks.grad.repository.UserRepository;
 import com.thoughtworks.grad.repository.impl.UserRepositoryImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -26,6 +23,11 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User newUser) {
         User user = userRepository.createUser(newUser);
         return new ResponseEntity<User>(user, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/api/users/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
+        return new ResponseEntity(userRepository.update(user), HttpStatus.ACCEPTED);
     }
 
 }
