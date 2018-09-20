@@ -1,12 +1,15 @@
 package com.thoughtworks.grad.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thoughtworks.grad.domain.Contact;
 import com.thoughtworks.grad.domain.User;
 import com.thoughtworks.grad.repository.UserStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -29,7 +32,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void should_get_url_from_server() throws Exception {
+    void should_get_users_from_server() throws Exception {
         UserStorage.save(new User(1, "zhou"));
         UserStorage.save(new User(2, "lan"));
 
@@ -83,6 +86,27 @@ public class UserControllerTest {
         mockMvc.perform(delete("/api/users/1")).andExpect(status().isNoContent());
 
         assertThat(UserStorage.getUsers().size()).isEqualTo(0);
-        assertThat(UserStorage.getUsers().get(1)).isNull();
+        assertThat(UserStorage.getUserById(1)).isNull();
+    }
+
+    @Test
+    void should_create_contact_for_user() throws Exception {
+        Contact contact1 = new Contact(1, "lan yixing", "male", 18, "18200288371");
+        ArrayList<Contact> contacts = new ArrayList<>();
+        contacts.add(contact1);
+        User user5 = new User(5, "zhou tian", contacts);
+        UserStorage.save(user5);
+
+        Contact contact2 = new Contact(2, "zeng zhipeng", "male", 19, "18200288372");
+
+        mockMvc.perform(post("/api/users/5/contacts").contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new ObjectMapper().writeValueAsString(contact2))).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(5))
+                .andExpect(jsonPath("$.name").value("zhou tian"))
+                .andExpect(jsonPath("$.contacts[0].id").value(1))
+                .andExpect(jsonPath("$.contacts[0].name").value("lan yixing"))
+                .andExpect(jsonPath("$.contacts[1].id").value(2))
+                .andExpect(jsonPath("$.contacts[1].name").value("zeng zhipeng"))
+                .andExpect(jsonPath("$.contacts[1].number").value("18200288372"));
     }
 }

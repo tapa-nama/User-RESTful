@@ -1,5 +1,6 @@
 package com.thoughtworks.grad.repository;
 
+import com.thoughtworks.grad.domain.Contact;
 import com.thoughtworks.grad.domain.User;
 
 import java.util.Collection;
@@ -9,8 +10,8 @@ import java.util.Map;
 public class UserStorage {
     private static final Map<Integer, User> USERS = new HashMap<>();
 
-    public static Map<Integer, User> getUsers() {
-        return USERS;
+    public static Collection<User> getUsers() {
+        return USERS.values();
     }
 
 
@@ -32,5 +33,15 @@ public class UserStorage {
 
     public static void delete(int id) {
         USERS.remove(id);
+    }
+
+    public static User getUserById(int id) {
+        return USERS.get(id);
+    }
+
+    public static User addContact(int userId, Contact contact) {
+         USERS.get(userId).getContacts().add(contact);
+         return USERS.get(userId);
+
     }
 }
