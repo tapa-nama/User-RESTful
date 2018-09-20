@@ -22,5 +22,7 @@ public interface UserRepository {
     User findContacts(int userId);
 
     User updateContact(int id, Contact contact);
+
+    void deleteContactOfUser(int userId, int contactId);
 }
 

@@ -5,7 +5,6 @@ import com.thoughtworks.grad.domain.User;
 import com.thoughtworks.grad.repository.UserRepository;
 import com.thoughtworks.grad.repository.UserStorage;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserRepositoryImpl implements UserRepository {
@@ -44,6 +43,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User updateContact(int userId, Contact contact) {
         return UserStorage.updateContact(userId, contact);
+    }
+
+    @Override
+    public void deleteContactOfUser(int userId, int contactId) {
+        UserStorage.getUserById(userId).getContacts().remove(contactId);
     }
 
 

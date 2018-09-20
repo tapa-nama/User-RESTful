@@ -56,4 +56,10 @@ public class UserController {
     }
 
 
+    @DeleteMapping("/api/users/{userId}/contacts/{contactId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteContactOfUSer(@PathVariable int userId, @PathVariable int contactId) {
+        userRepository.deleteContactOfUser(userId, contactId);
+    }
+
 }
