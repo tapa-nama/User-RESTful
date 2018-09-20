@@ -1,6 +1,5 @@
 package com.thoughtworks.grad.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.grad.domain.User;
 import com.thoughtworks.grad.repository.UserStorage;
@@ -11,9 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -75,5 +72,17 @@ public class UserControllerTest {
         int afterSize = UserStorage.getUsers().size();
 
         assertThat(afterSize).isEqualTo(beforeSize);
+    }
+
+    @Test
+    void should_delete_user() throws Exception {
+        User user = new User(1, "xin kuan");
+        UserStorage.save(user);
+
+
+        mockMvc.perform(delete("/api/users/1")).andExpect(status().isNoContent());
+
+        assertThat(UserStorage.getUsers().size()).isEqualTo(0);
+        assertThat(UserStorage.getUsers().get(1)).isNull();
     }
 }

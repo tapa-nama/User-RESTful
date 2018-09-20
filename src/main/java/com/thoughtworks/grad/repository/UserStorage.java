@@ -9,8 +9,8 @@ import java.util.Map;
 public class UserStorage {
     private static final Map<Integer, User> USERS = new HashMap<>();
 
-    public static Collection<User> getUsers() {
-        return USERS.values();
+    public static Map<Integer, User> getUsers() {
+        return USERS;
     }
 
 
@@ -26,9 +26,11 @@ public class UserStorage {
 
     public static User update(User user) {
         User beforeUser = USERS.get(user.getId());
-
         beforeUser.setName(user.getName());
-
         return beforeUser;
+    }
+
+    public static void delete(int id) {
+        USERS.remove(id);
     }
 }

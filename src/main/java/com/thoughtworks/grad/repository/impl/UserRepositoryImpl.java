@@ -11,7 +11,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Collection<User> findUsers() {
-        return UserStorage.getUsers();
+        return UserStorage.getUsers().values();
     }
 
     @Override
@@ -22,6 +22,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User update(User user) {
         return UserStorage.update(user);
+    }
+
+    @Override
+    public void delete(int id) {
+        UserStorage.delete(id);
     }
 
 

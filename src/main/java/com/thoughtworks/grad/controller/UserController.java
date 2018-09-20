@@ -30,4 +30,10 @@ public class UserController {
         return new ResponseEntity(userRepository.update(user), HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping("/api/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable int id) {
+        userRepository.delete(id);
+    }
+
 }
