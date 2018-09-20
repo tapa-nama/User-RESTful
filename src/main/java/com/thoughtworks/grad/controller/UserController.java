@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @RestController
@@ -18,6 +19,11 @@ public class UserController {
     @GetMapping("/api/users")
     public Collection<User> queryUser() {
         return userRepository.findUsers();
+    }
+
+    @GetMapping("/api/users/{id}/contacts")
+    public User findAllContacts(@PathVariable int id) {
+        return userRepository.findContacts(id);
     }
 
     @PostMapping("/api/users")

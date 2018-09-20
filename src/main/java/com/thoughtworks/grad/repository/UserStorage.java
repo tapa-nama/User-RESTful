@@ -3,6 +3,7 @@ package com.thoughtworks.grad.repository;
 import com.thoughtworks.grad.domain.Contact;
 import com.thoughtworks.grad.domain.User;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +41,12 @@ public class UserStorage {
     }
 
     public static User addContact(int userId, Contact contact) {
-         USERS.get(userId).getContacts().add(contact);
-         return USERS.get(userId);
+        USERS.get(userId).getContacts().add(contact);
+        return USERS.get(userId);
 
+    }
+
+    public static User findContacts(int userId) {
+        return USERS.get(userId);
     }
 }

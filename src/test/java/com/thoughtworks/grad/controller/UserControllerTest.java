@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.grad.domain.Contact;
 import com.thoughtworks.grad.domain.User;
 import com.thoughtworks.grad.repository.UserStorage;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -24,8 +25,9 @@ public class UserControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = standaloneSetup(controller()).build();
-        UserStorage.clear();
+
     }
+
 
     private UserController controller() {
         return new UserController();
@@ -89,24 +91,48 @@ public class UserControllerTest {
         assertThat(UserStorage.getUserById(1)).isNull();
     }
 
-    @Test
-    void should_create_contact_for_user() throws Exception {
+
+    private void createBasicUserWithContacts() {
         Contact contact1 = new Contact(1, "lan yixing", "male", 18, "18200288371");
+        Contact contact2 = new Contact(2, "zeng zhipeng", "male", 19, "18200288372");
         ArrayList<Contact> contacts = new ArrayList<>();
         contacts.add(contact1);
+        contacts.add(contact2);
         User user5 = new User(5, "zhou tian", contacts);
         UserStorage.save(user5);
+    }
 
-        Contact contact2 = new Contact(2, "zeng zhipeng", "male", 19, "18200288372");
+    @Test
+    void should_create_contact_for_user() throws Exception {
+        createBasicUserWithContacts();
+        Contact contact3 = new Contact(3, "xin kuan", "male", 17, "18200288373");
 
         mockMvc.perform(post("/api/users/5/contacts").contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(new ObjectMapper().writeValueAsString(contact2))).andExpect(status().isCreated())
+                .content(new ObjectMapper().writeValueAsString(contact3))).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(5))
                 .andExpect(jsonPath("$.name").value("zhou tian"))
+                .andExpect(jsonPath("$.contacts[0].id").value(1))
+                .andExpect(jsonPath("$.contacts[0].name").value("lan yixing"))
+                .andExpect(jsonPath("$.contacts[2].id").value(3))
+                .andExpect(jsonPath("$.contacts[2].name").value("xin kuan"))
+                .andExpect(jsonPath("$.contacts[2].number").value("18200288373"));
+    }
+
+
+    @Test
+    void should_find_contacts_of_user() throws Exception {
+        createBasicUserWithContacts();
+        mockMvc.perform(get("/api/users/5/contacts")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.contacts", hasSize(2)))
                 .andExpect(jsonPath("$.contacts[0].id").value(1))
                 .andExpect(jsonPath("$.contacts[0].name").value("lan yixing"))
                 .andExpect(jsonPath("$.contacts[1].id").value(2))
                 .andExpect(jsonPath("$.contacts[1].name").value("zeng zhipeng"))
                 .andExpect(jsonPath("$.contacts[1].number").value("18200288372"));
+    }
+
+    @AfterEach
+    void tearDown() {
+        UserStorage.clear();
     }
 }
