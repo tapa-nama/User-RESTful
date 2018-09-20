@@ -155,6 +155,24 @@ public class UserControllerTest {
         assertThat(UserStorage.getUserById(5).getContacts().size()).isEqualTo(1);
     }
 
+    @Test
+    void should_find_contact_of_user_by_name() throws Exception {
+        Contact contact = new Contact(1, "yang kaiguang", "male", 20, "18200288357");
+        ArrayList<Contact> contacts = new ArrayList<>();
+        contacts.add(contact);
+        User user = new User(6, "sjyuan", contacts);
+        UserStorage.save(user);
+
+        mockMvc.perform(get("/api/users/contacts")
+                .param("userName", "sjyuan")
+                .param("contactName", "yang kaiguang"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("yang kaiguang"))
+                .andExpect(jsonPath("$.gender").value("male"))
+                .andExpect(jsonPath("$.age").value(20))
+                .andExpect(jsonPath("$.number").value("18200288357"));
+    }
+
     @AfterEach
     void tearDown() {
         UserStorage.clear();

@@ -50,5 +50,10 @@ public class UserRepositoryImpl implements UserRepository {
         UserStorage.getUserById(userId).getContacts().remove(contactId);
     }
 
+    @Override
+    public Contact findContactByName(String userName, String contactName) {
+        return UserStorage.findContactByName(userName, contactName);
+    }
+
 
 }

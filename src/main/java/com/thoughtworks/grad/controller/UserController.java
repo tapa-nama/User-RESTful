@@ -26,6 +26,11 @@ public class UserController {
         return userRepository.findContacts(id);
     }
 
+    @GetMapping("/api/users/contacts")
+    public Contact findContactOfUserByName(@RequestParam String userName, @RequestParam String contactName) {
+        return userRepository.findContactByName(userName, contactName);
+    }
+
     @PostMapping("/api/users")
     public ResponseEntity<User> createUser(@RequestBody User newUser) {
         User user = userRepository.createUser(newUser);
@@ -61,5 +66,7 @@ public class UserController {
     public void deleteContactOfUSer(@PathVariable int userId, @PathVariable int contactId) {
         userRepository.deleteContactOfUser(userId, contactId);
     }
+
+
 
 }
