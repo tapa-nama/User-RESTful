@@ -15,9 +15,7 @@ public class UserStorage {
         return USERS.values();
     }
 
-
     public static User save(User newUser) {
-
         USERS.put(newUser.getId(), newUser);
         return USERS.get(newUser.getId());
     }
@@ -54,22 +52,28 @@ public class UserStorage {
         User user = USERS.get(userId);
         ArrayList<Contact> contacts = user.getContacts();
         int contactId = contact.getId();
-        contacts.stream().filter(oldContact -> oldContact.getId() == contactId).forEach(oldContact -> {
-            oldContact.setName(contact.getName());
-            oldContact.setAge(contact.getAge());
-            oldContact.setGender(contact.getGender());
-            oldContact.setNumber(contact.getNumber());
-        });
+        contacts.stream().filter(oldContact -> oldContact.getId() == contactId)
+                .forEach(oldContact -> {
+                    oldContact.setName(contact.getName());
+                    oldContact.setAge(contact.getAge());
+                    oldContact.setGender(contact.getGender());
+                    oldContact.setNumber(contact.getNumber());
+                });
         return user;
 
 
     }
 
     public static Contact findContactByName(String userName, String contactName) {
-        return USERS.entrySet().stream()
-                .filter(user -> user.getValue().getName().equals(userName))
-                .flatMap(user -> user.getValue().getContacts().stream())
-                .filter(contact -> contact.getName().equals(contactName))
-                .findFirst().orElse(null);
+        for (Map.Entry<Integer, User> user : USERS.entrySet()) {
+            if (user.getValue().getName().equals(userName)) {
+                for (Contact contact : user.getValue().getContacts()) {
+                    if (contact.getName().equals(contactName)) {
+                        return contact;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

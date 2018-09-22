@@ -3,7 +3,6 @@ package com.thoughtworks.grad.repository;
 import com.thoughtworks.grad.domain.Contact;
 import com.thoughtworks.grad.domain.User;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public interface UserRepository {
